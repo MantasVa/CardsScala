@@ -27,20 +27,18 @@ object Game {
 
   private def checkCards(player1: Player, player2: Player): (Player, Player) = {
 
-    val player1WonCards = player1.hand.filter(card => {
-      card.getValue(trumpSuit) >= player2.hand(player1.getCardIndex(card)).getValue(trumpSuit)
-    })
-    val finalPlayer1 = Player(List.empty, player1WonCards ++ player1WonCards
-      .map(c => player1.getCardIndex(c)).map(player2.hand(_))
-      .filter(x => x.getValue(trumpSuit) != player1.hand(player2.getCardIndex(x)).getValue(trumpSuit)))
+    val battles = player1.hand.zip(player2.hand)
+    battles.foldLeft((player1, player2))((players, cards) => {
+      val firstCardValue = cards._1.getValue(trumpSuit)
+      val secondCardValue = cards._2.getValue(trumpSuit)
 
-    val player2WonCards = player2.hand.filter(card => {
-      card.getValue(trumpSuit) >= player1.hand(player2.hand.indexOf(card)).getValue(trumpSuit)
+      if (firstCardValue > secondCardValue) {
+        (players._1.addWinningCards(List(cards._1, cards._2)), players._2.removeTopCard())
+      } else if (firstCardValue < secondCardValue) {
+        (players._1.removeTopCard(), players._2.addWinningCards(List(cards._1, cards._2)))
+      } else {
+        (players._1.addWinningCards(List(cards._1)), players._2.addWinningCards(List(cards._2)))
+      }
     })
-    val finalPlayer2 = Player(List.empty, player2WonCards ++ player2WonCards
-      .map(c => player2.getCardIndex(c)).map(player1.hand(_))
-      .filter(x => x.getValue(trumpSuit) != player2.hand(player1.getCardIndex(x)).getValue(trumpSuit)))
-
-    (finalPlayer1, finalPlayer2)
   }
 }

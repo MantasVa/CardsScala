@@ -1,9 +1,7 @@
 package com.mantas.cards
 
 case class Player(hand: List[Card], winningCards: List[Card] = List.empty) {
-  def takeCard: (Card, Player) = (hand.head, Player(hand.drop(1), winningCards))
-
-  def getCardIndex(card: Card): Int = hand.indexOf(card)
+  def removeTopCard():Player = this.copy(hand.tail, winningCards)
 
   def addWinningCards(cards: List[Card]): Player = this.copy(hand, winningCards ++ cards)
 }
