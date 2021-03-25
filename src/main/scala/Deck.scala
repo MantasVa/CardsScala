@@ -1,6 +1,6 @@
 package com.mantas.cards
 
-case class Deck(cardDeck: List[Card]) {
+case class Deck private (cardDeck: List[Card]) {
   def split(): (List[Card], List[Card]) = cardDeck.splitAt(cardDeck.size / 2)
 }
 

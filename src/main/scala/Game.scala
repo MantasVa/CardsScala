@@ -33,12 +33,12 @@ object Game {
       val secondCardValue = cards._2.getValue(trumpSuit)
 
       if (firstCardValue > secondCardValue) {
-        (players._1.removeTopCard().addWinningCards(List(cards._1, cards._2)), players._2.removeTopCard())
+        (players._1.addWinningCards(List(cards._1, cards._2)), players._2)
       } else if (firstCardValue < secondCardValue) {
-        (players._1.removeTopCard(), players._2.removeTopCard().addWinningCards(List(cards._1, cards._2)))
+        (players._1, players._2.addWinningCards(List(cards._1, cards._2)))
       } else {
-        (players._1.removeTopCard().addWinningCards(List(cards._1)),
-          players._2.removeTopCard().addWinningCards(List(cards._2)))
+        (players._1.addWinningCards(List(cards._1)),
+          players._2.addWinningCards(List(cards._2)))
       }
     })
   }
